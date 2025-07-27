@@ -1,0 +1,6 @@
+/node_modules
+# dependencies  and packages
+.env
+# environment variables file
+.gitignore
+# git ignore file
