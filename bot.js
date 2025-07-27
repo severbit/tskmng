@@ -1,10 +1,16 @@
 import bot from "./conf.js";
+import sequelize from "./db.js";
+import Task from "./TaskModel.js";
 
 // Обработчик команды /start
 // Отправляет приветственное сообщение пользователю
 bot.onText('/start', (msg) => {
     const chatId = msg.chat.id;
     console.log(`Пользователь ${msg.from.username} (${msg.from.id}) запустил бота.`);
+    sequelize.sync()
+        .then(() => {
+            console.log('Модели синхронизированы с базой данных.');
+        })
     if (msg.from.id === parseInt(process.env.OWNER_ID, 10)) {
         bot.sendMessage(chatId, "О великий и могучий создатель, ты запустил бота. Я твой личный помощник, чем могу помочь?");
     }
@@ -12,6 +18,7 @@ bot.onText('/start', (msg) => {
         bot.sendMessage(chatId, "Привет! Я личный бот для таск менеджера. Напиши /help, чтобы узнать, что я умею. Хотя нахуй тебе это надо, я этого бота только для себя написал)");
     }
 });
+
 
 // Обработчик команды /help
 // Отправляет список доступных команд
@@ -31,9 +38,23 @@ bot.onText('/tasks', (msg) => {
 
 // Обработчик команды /addtask
 // Запрашивает текст задачи для добавления
-bot.onText('/addtask', (msg) => {
+bot.onText('/addtask', async (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Введите текст задачи для добавления:");
+    bot.sendMessage(chatId, "Введите текст задачи:");
+    try {
+        bot.once('message', async (msg) => {
+            const task = await Task.create({
+                chatId: chatId,
+                text: msg.text,
+                done: false
+            })
+            bot.sendMessage(chatId, "Задача добавлена! \nТекст задачи: " + msg.text + "\nНомер задачи: " + task.id);
+            console.log(`✅ Задача добавлена: ${task.text} для чата ${chatId}`);
+        })
+    } catch (error) {
+        console.error('Ошибка при добавлении задачи:', error);
+        bot.sendMessage(chatId, "❌ Произошла ошибка при добавлении задачи. Пожалуйста, попробуйте еще раз.");
+    }
 })
 
 
