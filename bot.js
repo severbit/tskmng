@@ -1,4 +1,5 @@
 import bot from "./conf.js";
+import addTask from "./controllers/addTask.js";
 import sequelize from "./db.js";
 import Task from "./TaskModel.js";
 
@@ -41,20 +42,7 @@ bot.onText('/tasks', (msg) => {
 bot.onText('/addtask', async (msg) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, "Введите текст задачи:");
-    try {
-        bot.once('message', async (msg) => {
-            const task = await Task.create({
-                chatId: chatId,
-                text: msg.text,
-                done: false
-            })
-            bot.sendMessage(chatId, "Задача добавлена! \nТекст задачи: " + msg.text + "\nНомер задачи: " + task.id);
-            console.log(`✅ Задача добавлена: ${task.text} для чата ${chatId}`);
-        })
-    } catch (error) {
-        console.error('Ошибка при добавлении задачи:', error);
-        bot.sendMessage(chatId, "❌ Произошла ошибка при добавлении задачи. Пожалуйста, попробуйте еще раз.");
-    }
+    addTask(bot, chatId, msg)
 })
 
 
