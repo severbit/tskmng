@@ -1,5 +1,6 @@
 import bot from "./conf.js";
 import addTask from "./controllers/addTask.js";
+import removeTask from "./controllers/removeTask.js";
 import sequelize from "./db.js";
 import Task from "./TaskModel.js";
 
@@ -51,6 +52,7 @@ bot.onText('/addtask', async (msg) => {
 bot.onText('/removetask', (msg) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, "Введите номер задачи для удаления:");
+    removeTask(bot, chatId, msg);
 })
 
 
