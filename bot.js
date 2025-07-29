@@ -1,11 +1,13 @@
 import bot from "./conf.js";
 import addTask from "./controllers/addTask.js";
 import removeTask from "./controllers/removeTask.js";
+import showTasks from "./controllers/showTasks.js";
 import sequelize from "./db.js";
-import Task from "./TaskModel.js";
 
 // Обработчик команды /start
 // Отправляет приветственное сообщение пользователю
+
+
 bot.onText('/start', (msg) => {
     const chatId = msg.chat.id;
     console.log(`Пользователь ${msg.from.username} (${msg.from.id}) запустил бота.`);
@@ -34,7 +36,7 @@ bot.onText('/help', (msg) => {
 // Отправляет список задач пользователю
 bot.onText('/tasks', (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Список задач:\n1. Задача 1\n2. Задача 2\n3. Задача 3");
+    showTasks(bot, chatId)
 });
 
 
