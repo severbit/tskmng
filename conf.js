@@ -9,8 +9,6 @@ const comands = [
     { command: "/addtask", description: "📌 Добавить задачу" },
     { command: "/removetask", description: "🗑 Удалить задачу" },
     { command: "/donetask", description: "✅ Отметить задачу как выполненную" },
-    { command: "/undotask", description: "⛔️ Отменить выполнение задачи" },
-    { command: "/clearcompleted", description: "🛁 Очистить выполненные задачи" },
     // { command: "/settings", description: "Настройки" },
 ]
 const BOT_TOKEN = process.env.BOT_TOKEN;

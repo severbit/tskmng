@@ -11,7 +11,7 @@ const showTasks = async (bot, chatId) => {
         }
         let message = "Список задач:\n";
         tasks.forEach((task, index) => {
-            message += `${index + 1}. ${task.text} - ${task.done ? "Выполнена" : "Не выполнена"}\n`;
+            message += `${task.id}. ${task.text} - ${task.done ? "Выполнена ✅" : "Не выполнена ⏳"}\n`;
         });
         bot.sendMessage(chatId, message);
         console.log(`✅ Задачи для чата ${chatId} успешно получены.`);

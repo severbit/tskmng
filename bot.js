@@ -1,5 +1,6 @@
 import bot from "./conf.js";
 import addTask from "./controllers/addTask.js";
+import doneTask from "./controllers/doneTask.js";
 import removeTask from "./controllers/removeTask.js";
 import showTasks from "./controllers/showTasks.js";
 import sequelize from "./db.js";
@@ -63,20 +64,5 @@ bot.onText('/removetask', (msg) => {
 bot.onText('/donetask', (msg) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, "Введите номер задачи для отметки как выполненной:");
+    doneTask(bot, chatId, msg);
 })
-
-
-// Обработчик команды /undotask
-// Отменяет выполнение задачи
-bot.onText('/undotask', (msg) => {
-    const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Введите номер задачи для отмены выполнения:");
-})
-
-
-// Обработчик команды /clearcompleted
-// Очищает выполненные задачи
-bot.onText('/clearcompleted', (msg) => {
-    const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Все выполненные задачи были очищены.");
-});
