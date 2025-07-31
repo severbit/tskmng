@@ -69,6 +69,7 @@ bot.onText('/donetask', (msg) => {
 
 bot.onText("/scheduler", (msg) => {
     const chatId = msg.chat.id  
+    isSchedule != isSchedule
     if(showTasks() != false  && isSchedule){
         bot.sendMessage(chatId, "Активировано")
     }
