@@ -7,7 +7,7 @@ const showTasks = async (bot, chatId) => {
         })
         if (tasks.length === 0) {
             bot.sendMessage(chatId, "Список задач пуст.");
-            return;
+            return false;
         }
         let message = "Список задач:\n";
         tasks.forEach((task, index) => {
@@ -15,6 +15,7 @@ const showTasks = async (bot, chatId) => {
         });
         bot.sendMessage(chatId, message);
         console.log(`✅ Задачи для чата ${chatId} успешно получены.`);
+        return tasks
     } catch (error) {
         console.error('Ошибка при получении задач:', error);
         bot.sendMessage(chatId, "❌ Произошла ошибка при получении задач. Пожалуйста, попробуйте еще раз.");

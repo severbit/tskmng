@@ -4,3 +4,4 @@
 # environment variables file
 .gitignore
 # git ignore file
+./node_modules

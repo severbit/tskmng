@@ -8,7 +8,7 @@ import sequelize from "./db.js";
 // Обработчик команды /start
 // Отправляет приветственное сообщение пользователю
 
-
+const isSchedule = false
 bot.onText('/start', (msg) => {
     const chatId = msg.chat.id;
     console.log(`Пользователь ${msg.from.username} (${msg.from.id}) запустил бота.`);
@@ -65,4 +65,15 @@ bot.onText('/donetask', (msg) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, "Введите номер задачи для отметки как выполненной:");
     doneTask(bot, chatId, msg);
+})
+
+bot.onText("/scheduler", (msg) => {
+    const chatId = msg.chat.id  
+    if(showTasks() != false  && isSchedule){
+        bot.sendMessage(chatId, "Активировано")
+    }
+    else{
+        bot.sendMessage(chatId, "Нет активных задач")
+    }
+    return
 })
