@@ -4,76 +4,58 @@ import doneTask from "./controllers/doneTask.js";
 import removeTask from "./controllers/removeTask.js";
 import showTasks from "./controllers/showTasks.js";
 import sequelize from "./db.js";
+import cron from "node-cron";
 
-// Обработчик команды /start
-// Отправляет приветственное сообщение пользователю
-
-const isSchedule = false
 bot.onText('/start', (msg) => {
     const chatId = msg.chat.id;
     console.log(`Пользователь ${msg.from.username} (${msg.from.id}) запустил бота.`);
     sequelize.sync()
         .then(() => {
             console.log('Модели синхронизированы с базой данных.');
-        })
+        });
+
     if (msg.from.id === parseInt(process.env.OWNER_ID, 10)) {
         bot.sendMessage(chatId, "О великий и могучий создатель, ты запустил бота. Я твой личный помощник, чем могу помочь?");
-    }
-    else {
+    } else {
         bot.sendMessage(chatId, "Привет! Я личный бот для таск менеджера. Напиши /help, чтобы узнать, что я умею. Хотя нахуй тебе это надо, я этого бота только для себя написал)");
     }
 });
 
-
-// Обработчик команды /help
-// Отправляет список доступных команд
 bot.onText('/help', (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "helper text");
+    bot.sendMessage(chatId, "Список команд:\n/addtask — добавить задачу\n/tasks — показать задачи\n/removetask — удалить задачу\n/donetask — отметить задачу выполненной\n/scheduler — включить/выключить ежедневные напоминания");
 });
 
-
-// Обработчик команды /tasks
-// Отправляет список задач пользователю
 bot.onText('/tasks', (msg) => {
     const chatId = msg.chat.id;
-    showTasks(bot, chatId)
+    showTasks(bot, chatId);
 });
 
-
-// Обработчик команды /addtask
-// Запрашивает текст задачи для добавления
-bot.onText('/addtask', async (msg) => {
+bot.onText('/addtask', (msg) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, "Введите текст задачи:");
-    addTask(bot, chatId, msg)
-})
+    addTask(bot, chatId, msg);
+});
 
-
-// Обработчик команды /removetask
-// Удаляет задачу по номеру 
 bot.onText('/removetask', (msg) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, "Введите номер задачи для удаления:");
     removeTask(bot, chatId, msg);
-})
+});
 
-
-// Обработчик команды /donetask
-// Отмечает задачу как выполненную
 bot.onText('/donetask', (msg) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, "Введите номер задачи для отметки как выполненной:");
     doneTask(bot, chatId, msg);
-})
+});
 
-bot.onText("/scheduler", (msg) => {
-    const chatId = msg.chat.id  
-    if(showTasks() != false  && isSchedule){
-        bot.sendMessage(chatId, "Активировано")
-    }
-    else{
-        bot.sendMessage(chatId, "Нет активных задач")
-    }
-    return
-})
+bot.onText('/scheduler', async (msg) => {
+    const chatId = msg.chat.id;
+
+    const task = cron.schedule('0 9,21 * * *', async () => {
+        await showTasks(bot, chatId);
+    }, {
+        timezone: "Asia/Almaty" // измени на свою зону
+    });
+    bot.sendMessage(process.env.OWNER_ID, 'Автоматическое уведомление включено')
+});
