@@ -9,7 +9,7 @@ const comands = [
     { command: "/addtask", description: "📌 Добавить задачу" },
     { command: "/removetask", description: "🗑 Удалить задачу" },
     { command: "/donetask", description: "✅ Отметить задачу как выполненную" },
-    { command: "/shceduler", description: "⏳ Активировать таймер"}
+    { command: "/scheduler", description: "⏳ Активировать таймер"}
     // { command: "/settings", description: "Настройки" },
 ]
 const BOT_TOKEN = process.env.BOT_TOKEN;
